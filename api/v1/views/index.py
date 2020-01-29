@@ -4,6 +4,9 @@ index views
 '''
 from api.v1.views import app_views
 from flask import jsonify
+from models import storage
+from models.engine import FileStorage
+from models.engine import DBStorage
 
 
 @app_views.route('/status')
