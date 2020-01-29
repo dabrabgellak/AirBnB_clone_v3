@@ -20,12 +20,12 @@ def stats():
     Return count stats
     '''
     stats_count = {
-        "amenities": 47,
-        "cities": 36,
-        "places": 154,
-        "reviews": 718,
-        "states": 27,
-        "users": 31
-    }
+        "amenities": storage.count('Amenity'),
+        "cities": storage.count('City'),
+        "places": storage.count('Place'),
+        "reviews": storage.count('Review'),
+        "states": storage.count('State'),
+        "users": storage.count('User')
+        }
 
     return jsonify(**stats_count)
