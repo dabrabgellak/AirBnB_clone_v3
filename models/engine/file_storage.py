@@ -73,7 +73,7 @@ class FileStorage:
         """ Retrieve one object """
         self.cls = cls
         self.id = id
-        obj_key = models.storage.all(cls)
+        obj_key = self.all(cls)
         key = "{}.{}".format(cls, id)
         for key in obj_key:
             return obj_key[key]

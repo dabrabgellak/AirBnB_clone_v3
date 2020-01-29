@@ -4,7 +4,6 @@ Contains the class DBStorage
 """
 
 import models
-from models import storage
 from models.amenity import Amenity
 from models.base_model import BaseModel, Base
 from models.city import City
@@ -82,7 +81,7 @@ class DBStorage:
         return models.storage.__objects.get(obj_key, None)"""
         self.cls = cls
         self.id = id
-        obj_key = models.storage.all(cls)
+        obj_key = self.all(cls)
         key = "{}.{}".format(cls, id)
         for key in obj_key:
             return obj_key[key]
