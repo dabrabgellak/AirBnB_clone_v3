@@ -19,7 +19,7 @@ def all(cls):
 def get_state(id):
     '''
     Args:
-        id (string): 
+        id (string):
     Returns:
         state object or None if id not found
     '''
@@ -34,7 +34,7 @@ def create(data):
     '''
     create
     Args:
-        data (dict): 
+        data (dict):
     Returns:
         dict of object created
     '''
@@ -77,7 +77,7 @@ def error_handler(error, message):
     Gives error message when any invalid url are requested.
     Args:
         error (string):
-        message (string): 
+        message (string):
     Returns:
         Error message.
     """
@@ -107,7 +107,8 @@ def states():
         return make_response(jsonify(result), 201)
 
 
-@app_views.route('/states/<id>', strict_slashes=False,  methods=('GET', 'DELETE', 'PUT'))
+@app_views.route('/states/<id>', strict_slashes=False,
+                 methods=('GET', 'DELETE', 'PUT'))
 def states_id(id):
     '''
     GET: return dict state by id
