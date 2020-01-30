@@ -8,6 +8,7 @@ from models import storage
 from models.city import City
 from models.state import State
 from api.v1.views.states import get_state
+from werkzeug.exceptions import BadRequest
 
 
 def all(cls):
@@ -119,7 +120,11 @@ def cities_id_state(state_id):
         return make_response(jsonify(list_cities), 200)
 
     if request.method == 'POST':
-        data = request.get_json()
+        try:
+            data = request.get_json()
+        except BadRequest:
+            return error_handler(400, 'Not a JSON')
+
         if not data:
             return error_handler(400, 'Not a JSON')
         if get_state(state_id) is None:
@@ -154,7 +159,10 @@ def cities(city_id):
         return make_response(jsonify({}), 200)
 
     if request.method == 'PUT':
-        data = request.get_json()
+        try:
+            data = request.get_json()
+        except BadRequest:
+            return error_handler(400, 'Not a JSON')
         if not data:
             return error_handler(400, 'Not a JSON')
         city_updated = update(city_id, data)
