@@ -103,26 +103,27 @@ def states():
 
         if data.get('name', None) is None:
             return error_handler(400, 'Missing name')
-        result = create(data)
-        return make_response(jsonify(result), 201)
+        state_created = create(data)
+        state_created = state_created.to_dict()
+        return make_response(jsonify(state_created), 201)
 
 
-@app_views.route('/states/<id>', strict_slashes=False,
+@app_views.route('/states/<state_id>', strict_slashes=False,
                  methods=('GET', 'DELETE', 'PUT'))
-def states_id(id):
+def states_id(state_id):
     '''
     GET: return dict state by id
     DELETE: delete state by id
     '''
     if request.method == 'GET':
-        state = get_state(id)
+        state = get_state(state_id)
         if state is None:
             return error_handler(404, 'Not found')
         state = state.to_dict()
         return make_response(jsonify(state), 200)
 
     if request.method == 'DELETE':
-        state = get_state(id)
+        state = get_state(state_id)
         if state is None:
             return error_handler(404, 'Not found')
         delete(state)
@@ -132,6 +133,8 @@ def states_id(id):
         data = request.get_json()
         if not data:
             return error_handler(400, 'Not a JSON')
-        state_updated = update(id, data)
+        state_updated = update(state_id, data)
+        if state_updated is None:
+            return error_handler(404, 'Not found')
         state_updated = state_updated.to_dict()
         return make_response(jsonify(state_updated), 200)
