@@ -18,7 +18,7 @@ def all(cls):
     return cities
 
 
-def get_citie_by(state_id):
+def get_cities_by(state_id):
     '''
     Args:
         state_id (string):
@@ -26,10 +26,9 @@ def get_citie_by(state_id):
         city object or None if id not found
     '''
     cities = all(City)
-    for city in cities.values():
-        if city.state_id == state_id:
-            return city
-    return None
+    list_cities = [city.to_dict() for city in cities.values()
+                   if city.state_id == state_id]
+    return list_cities
 
 
 def get_city(city_id):
@@ -41,7 +40,7 @@ def get_city(city_id):
     '''
     cities = all(City)
     for city in cities.values():
-        if city.to_dict()['id'] == city_id:
+        if city.id == city_id:
             return city
     return None
 
@@ -111,11 +110,13 @@ def cities_id_state(state_id):
     POST: create cities
     '''
     if request.method == 'GET':
-        city = get_citie_by(state_id)
-        if city is None:
+        if get_state(state_id) is None:
             return error_handler(404, 'Not found')
-        city = city.to_dict()
-        return make_response(jsonify(city), 200)
+
+        list_cities = get_cities_by(state_id)
+        if not list_cities:
+            return error_handler(404, 'Not found')
+        return make_response(jsonify(list_cities), 200)
 
     if request.method == 'POST':
         data = request.get_json()
