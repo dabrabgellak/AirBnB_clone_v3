@@ -23,6 +23,7 @@ def get_state(id):
     Returns:
         state object or None if id not found
     '''
+    print(id)
     states = all(State)
     for state in states.values():
         if state.to_dict()['id'] == id:

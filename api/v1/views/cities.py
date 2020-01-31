@@ -7,7 +7,6 @@ from flask import jsonify, make_response, request
 from models import storage
 from models.city import City
 from models.state import State
-from api.v1.views.states import get_state
 from werkzeug.exceptions import BadRequest
 from models import storage
 
@@ -91,6 +90,21 @@ def update(id, data):
     return city
 
 
+def get_state(id):
+    '''
+    Args:
+        id (string):
+    Returns:
+        state object or None if id not found
+    '''
+    print(id)
+    states = all(State)
+    for state in states.values():
+        if state.to_dict()['id'] == id:
+            return state
+    return None
+
+
 def error_handler(error, message):
     """
     Gives error message when any invalid url are requested.
@@ -104,15 +118,16 @@ def error_handler(error, message):
     return make_response(jsonify({'error': message}), error)
 
 
-@app_views.route('/states/<state_id>/cities/', strict_slashes=False,
-                 methods=('GET', 'POST'))
+@app_views.route('/states/<string:state_id>/cities', methods=['GET', 'POST'],
+                 strict_slashes=False)
 def cities_id_state(state_id):
     '''
     GET: return dict cities by state_id
     POST: create cities
     '''
     if request.method == 'GET':
-        if get_state(state_id) is None:
+        result = get_state(state_id)
+        if result is None:
             return error_handler(404, 'Not found')
 
         list_cities = get_cities_by(state_id)
