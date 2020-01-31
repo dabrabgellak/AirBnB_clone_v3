@@ -9,6 +9,7 @@ from models.city import City
 from models.state import State
 from api.v1.views.states import get_state
 from werkzeug.exceptions import BadRequest
+from models import storage
 
 
 def all(cls):
@@ -115,11 +116,9 @@ def cities_id_state(state_id):
             return error_handler(404, 'Not found')
 
         list_cities = get_cities_by(state_id)
-        if not list_cities:
-            return error_handler(404, 'Not found')
         return make_response(jsonify(list_cities), 200)
 
-    if request.method == 'POST':
+    elif request.method == 'POST':
         try:
             data = request.get_json()
         except BadRequest:
@@ -151,14 +150,14 @@ def cities(city_id):
         city = city.to_dict()
         return make_response(jsonify(city), 200)
 
-    if request.method == 'DELETE':
+    elif request.method == 'DELETE':
         city = get_city(city_id)
         if city is None:
             return error_handler(404, 'Not found')
         delete(city)
         return make_response(jsonify({}), 200)
 
-    if request.method == 'PUT':
+    elif request.method == 'PUT':
         try:
             data = request.get_json()
         except BadRequest:
